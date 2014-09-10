@@ -143,6 +143,7 @@ G {
   MulExpr
     = MulExpr:x '*':op PriExpr:y  -- times
     | MulExpr:x '/':op PriExpr:y  -- divide
+    | MulExpr:x '%':op PriExpr:y  -- modulus
     | PriExpr
 
   PriExpr
@@ -464,7 +465,7 @@ console.log('delta', v, '=', d / numDeltas);
 
   if (error > this.epsilon) {
     vars.forEach(function(v) {
-      if (self.locked[v]) {
+      if (!self.locked[v]) {
         var sign = Math.random() < 0.5 ? -1 : 1;
         self.vars[v] += sign * self.epsilon;
       }
