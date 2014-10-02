@@ -1,5 +1,5 @@
 var VariableWidget = {
-    create: function(name, value, optEditable, optNoDeleteButton) {
+    create: function(relax, name, value, optEditable, optNoDeleteButton) {
       var node = document.createElement('variable');
       var nameNode = node.appendChild(this._createNameNode(name));
       var valueNode = node.appendChild(this._createValueNode(value, optEditable !== undefined ? optEditable : true));
@@ -16,7 +16,9 @@ var VariableWidget = {
       }
 
       node.renderValue = function() {
-        this.renderedValue = valueNode.innerHTML = '' + this.value; //this.value.toFixed(2).replace(/\.?0+$/, '');
+        var decimalPlaces = Math.round(-Math.log10(relax.epsilon));
+        var pretty = parseFloat(this.value.toFixed(decimalPlaces));
+        this.renderedValue = valueNode.innerHTML = '' + pretty;
       };
 
       node.updateValue = function() {

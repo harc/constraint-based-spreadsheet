@@ -182,7 +182,7 @@ function Relax() {
   this.constraints = [];
   this.shouldRelax = false;
 
-  this.errorWidget = VariableWidget.create('error', 0, false, true);
+  this.errorWidget = VariableWidget.create(this, 'error', 0, false, true);
   this.errorWidget.setAttribute('id', 'error');
 
   this.addConstraintButton = document.createElement('addConstraintButton');
@@ -222,7 +222,7 @@ Relax.prototype.updateVarsView = function() {
   var self = this;
   Object.keys(this.vars).forEach(function(v) {
     if (!self.varWidgets[v]) {
-      self.varWidgets[v] = VariableWidget.create(v, 0);
+      self.varWidgets[v] = VariableWidget.create(self, v, 0);
       document.body.appendChild(self.varWidgets[v]);
       self.varWidgets[v].addEventListener('valuechange', self.varValueChangeHandler.bind(self), false);
       self.varWidgets[v].addEventListener('lockedchange', self.varLockedChangeHandler.bind(self), false);
