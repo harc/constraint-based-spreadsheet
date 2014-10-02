@@ -16,7 +16,7 @@ var VariableWidget = {
       }
 
       node.renderValue = function() {
-        var decimalPlaces = Math.round(-Math.log10(relax.epsilon));
+        var decimalPlaces = Math.round(-(Math.log(relax.epsilon) / Math.log(10)));
         var pretty = parseFloat(this.value.toFixed(decimalPlaces));
         this.renderedValue = valueNode.innerHTML = '' + pretty;
       };
