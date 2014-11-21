@@ -289,13 +289,18 @@ Relax.prototype.addVar = function(v, optValue) {
 
 Relax.prototype.removeVar = function(v) {
   var self = this;
+  var value = this.varWidgets[v].renderedValue;
   this.varWidgets[v].parentElement.removeChild(this.varWidgets[v]);
   delete this.varWidgets[v];
   delete this.vars[v];
   delete this.locked[v];
   this.constraints.forEach(function(c) {
-    if (c.vars.indexOf(v) >= 0) {
-      self.removeConstraint(c);
+    if (c.killVar(v, value)) {
+      if (Object.keys(c.vars).length === 0) {
+        self.removeConstraint(c);
+      } else {
+        self.constraintChanged(c);
+      }
     }
   });
 };

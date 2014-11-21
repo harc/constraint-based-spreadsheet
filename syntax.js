@@ -28,24 +28,49 @@ var ConstraintLanguage = {
     },
 
     constraintFromString: function(str, optWeight) {
-      var thunk = this.grammar.matchContents(str, 'Constraint');
-      if (thunk === undefined) {
-        throw 'invalid constraint: ' + str;
-      }
+      var self = this;
+      var c = {
+        init: function(str, optWeight) {
+          this.expr = str;
+          this.weight = optWeight || 1;
 
-      var vars = {};
-      thunk(this._recordVars(vars), 'eager');
+          var thunk = self.grammar.matchContents(str, 'Constraint');
+          if (thunk === undefined) {
+            throw 'invalid constraint: ' + str;
+          }
 
-      var expr = thunk(this._toErrorExpr);
-      if (optWeight) {
-        expr += ' * ' + optWeight;
-      }
+          var vars = {};
+          thunk(self._recordVars(vars), 'eager');
+          this.vars = Object.keys(vars);
 
-      return {
-          expr: str,
-          vars: Object.keys(vars),
-          errorFn: new Function('vars', 'return ' + expr)
+          var errorExpr = thunk(self._toErrorExpr) + ' * ' + this.weight;
+          this.errorFn = new Function('vars', 'return ' + errorExpr);
+        },
+        killVar: function(name, value) {
+          var idx = this.vars.indexOf(name);
+          if (idx >= 0) {
+            var newExpr = '';
+            var parts = this.expr.split(name);
+            for (var p = 0; p < parts.length; p++) {
+              var thisPart = parts[p];
+              var lastPart = parts[p - 1];
+              var nextPart = parts[p + 1];
+              if (p > 0 &&
+                  !(lastPart && /[a-zA-Z0-9]/.test(lastPart[lastPart.length - 1]) ||
+                    nextPart && /[a-zA-Z0-9]/.test(nextPart[0]))) {
+                newExpr += value;
+              }
+              newExpr += thisPart;
+            }
+            this.init(newExpr, this.weight);
+            return true;
+          } else {
+            return false;
+          }
+        }
       };
+      c.init(str, optWeight);
+      return c;
     }
 };
 
