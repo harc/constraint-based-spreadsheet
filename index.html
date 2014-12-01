@@ -296,11 +296,7 @@ Relax.prototype.removeVar = function(v) {
   delete this.locked[v];
   this.constraints.forEach(function(c) {
     if (c.killVar(v, value)) {
-      if (Object.keys(c.vars).length === 0) {
-        self.removeConstraint(c);
-      } else {
-        self.constraintChanged(c);
-      }
+      self.constraintChanged(c);
     }
   });
 };
