@@ -112,6 +112,10 @@ constraints {
   right: 10pt;
 }
 
+#varWidgetsDiv {
+  margin-top: 10pt;
+}
+
 addConstraintButton {
   display: inline-block;
   padding: 2pt;
@@ -221,15 +225,16 @@ Relax.prototype.longWaitMillis = 1000;
 Relax.prototype.updateVarsView = function() {
   var self = this;
   Object.keys(this.vars).forEach(function(v) {
-    if (!self.varWidgets[v]) {
-      self.varWidgets[v] = VariableWidget.create(self, v, 0);
-      document.body.appendChild(self.varWidgets[v]);
-      self.varWidgets[v].addEventListener('valuechange', self.varValueChangeHandler.bind(self), false);
-      self.varWidgets[v].addEventListener('lockedchange', self.varLockedChangeHandler.bind(self), false);
-      self.varWidgets[v].addEventListener('delete', self.varDeleteHandler.bind(self), false);
+    var varWidget = self.varWidgets[v];
+    if (!varWidget) {
+      varWidget = self.varWidgets[v] = VariableWidget.create(self, v, 0);
+      varWidgetsDiv.appendChild(varWidget);
+      varWidget.addEventListener('valuechange', self.varValueChangeHandler.bind(self), false);
+      varWidget.addEventListener('lockedchange', self.varLockedChangeHandler.bind(self), false);
+      varWidget.addEventListener('delete', self.varDeleteHandler.bind(self), false);
     }
-    if (self.varWidgets[v].value !== self.vars[v]) {
-      self.varWidgets[v].setValue(self.vars[v]);
+    if (varWidget.value !== self.vars[v]) {
+      varWidget.setValue(self.vars[v]);
     }
   });
 };
@@ -483,6 +488,7 @@ console.log('delta', v, '=', d / numDeltas);
   <body>
     <constraints>
     </constraints>
+    <div id="varWidgetsDiv"></div>
     <bottomRightDiv>
       <img src="loading.gif" id="loading">
     </bottomRightDiv>
