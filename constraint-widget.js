@@ -54,7 +54,6 @@ var ConstraintWidget = {
           function(e) {
             if (e.which === 13) {
               this.parentElement.update();
-              this.blur();
               e.preventDefault();
             }
             setTimeout(this.parentElement.updateDirty, 0);

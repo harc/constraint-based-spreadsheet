@@ -47,7 +47,6 @@ var VariableWidget = {
 
       node.setValue = function(newValue) {
         this.value = newValue;
-        this.setAttribute('title', this.value);
         this.renderValue();
         this.updateClassName();
       };
