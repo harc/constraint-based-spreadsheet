@@ -47,12 +47,14 @@ var ConstraintWidget = {
       var exprNode = document.createElement('expr');
       exprNode.innerHTML = expr;
       exprNode.setAttribute('contenteditable', true);
+      exprNode.setAttribute('spellcheck', false);
 
       exprNode.addEventListener(
           'keydown',
           function(e) {
             if (e.which === 13) {
               this.parentElement.update();
+              this.blur();
               e.preventDefault();
             }
             setTimeout(this.parentElement.updateDirty, 0);

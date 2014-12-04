@@ -33,9 +33,12 @@ variable, constraint, addConstraintButton {
   border-radius: 4px;
   overflow: hidden;
   margin: 4pt;
-  float: left;
   clear: both;
   cursor: default;
+}
+
+variable {
+  float: left;
 }
 
 variable > *,
@@ -43,8 +46,7 @@ constraint > * {
   padding: 6px;
 }
 
-variable > value,
-constraint > expr {
+variable > value {
   cursor: text;
 }
 
@@ -102,6 +104,7 @@ constraint > deleteButton {
 constraint > expr {
   background: beige;
   outline: none;
+  padding-right: 10pt;
 }
 
 constraints {
@@ -110,6 +113,10 @@ constraints {
   position: absolute;
   top: 10pt;
   right: 10pt;
+}
+
+constraints > * {
+  float: right;
 }
 
 #varWidgetsDiv {
@@ -169,12 +176,6 @@ G {
     <script src=syntax.js></script>
     <script>
 
-// Helpers
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-
 // Sutherland-Style Relaxation
 
 function Relax() {
@@ -184,6 +185,7 @@ function Relax() {
   this.varWidgets = {};
   this.locked = {};
   this.constraints = [];
+  this.useOnePassMethod = false;
   this.shouldRelax = false;
 
   this.errorWidget = VariableWidget.create(this, 'error', 0, false, true);
@@ -399,31 +401,31 @@ Relax.prototype.iterateForUpTo = function(tMillis) {
   var constraintsForRelaxation = this.constraints.slice();
   var vars = Object.keys(this.vars).filter(function(v) { return !self.locked[v]; });
 
-/*
-  var computeStack = [];
-  var didSomething;
-  do {
-    didSomething = false;
-    vars.forEach(function(v) {
-      if (self.locked[v]) {
-        return;
-      }
-      var numConstraintsFound = 0;
-      var theConstraint;
-      constraintsForRelaxation.forEach(function(c) {
-        if (c.vars.indexOf(v) >= 0) {
-          theConstraint = c;
-          numConstraintsFound++;
+  if (this.useOnePassMethod) {
+    var computeStack = [];
+    var didSomething;
+    do {
+      didSomething = false;
+      vars.forEach(function(v) {
+        if (self.locked[v]) {
+          return;
+        }
+        var numConstraintsFound = 0;
+        var theConstraint;
+        constraintsForRelaxation.forEach(function(c) {
+          if (c.vars.indexOf(v) >= 0) {
+            theConstraint = c;
+            numConstraintsFound++;
+          }
+        });
+        if (numConstraintsFound == 1 && theConstraint.vars.length > 1) {
+          computeStack.push({variable: v, constraint: theConstraint});
+          constraintsForRelaxation = constraintsForRelaxation.filter(function(c) { return c !== theConstraint; });
+          didSomething = true;
         }
       });
-      if (numConstraintsFound == 1 && theConstraint.vars.length > 1) {
-        computeStack.push({variable: v, constraint: theConstraint});
-        constraintsForRelaxation = constraintsForRelaxation.filter(function(c) { return c !== theConstraint; });
-        didSomething = true;
-      }
-    });
-  } while(didSomething);
-*/
+    } while(didSomething);
+  }
 
   vars = {};
   constraintsForRelaxation.forEach(function(c) {
@@ -434,11 +436,6 @@ Relax.prototype.iterateForUpTo = function(tMillis) {
     });
   });
   vars = Object.keys(vars);
-
-function extractProperty(p) { return function(obj) { return obj[p]; }; };
-
-  console.log('relaxing variables', vars);
-  //console.log('computeStack is', computeStack.map(extractProperty('variable')));
 
   var t0 = Date.now();
   var count = 0;
@@ -457,12 +454,12 @@ console.log('delta', v, '=', d / numDeltas);
     count++;
   }
 
-/*
-  while (computeStack.length > 0) {
-    var entry = computeStack.pop();
-    this.adjustVarForConstraint(entry.variable, entry.constraint);
-  };
-*/
+  if (this.useOnePassMethod) {
+    while (computeStack.length > 0) {
+      var entry = computeStack.pop();
+      this.adjustVarForConstraint(entry.variable, entry.constraint);
+    }
+  }
 
   var error = this.getError();
   this.errorWidget.setValue(error);
