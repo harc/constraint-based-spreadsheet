@@ -114,8 +114,10 @@ function makeConstraint(expr) {
     var pretty = toPrettyChar(e.keyCode);
     if (pretty !== undefined &&
         typeof this.selectionStart === 'number' && typeof this.selectionEnd == 'number') {
-      this.value = this.value.slice(0, this.selectionStart) + pretty + this.value.slice(this.selectionEnd);
-      this.selectionStart = this.selectionEnd = this.selectionStart + 1;
+      var selectionStart = this.selectionStart;
+      var selectionEnd = this.selectionEnd;
+      this.value = this.value.slice(0, selectionStart) + pretty + this.value.slice(selectionEnd);
+      this.setSelectionRange(selectionStart + 1, selectionStart + 1);
       return false;
     }
   };
