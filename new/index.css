@@ -16,6 +16,8 @@ addConstraintButton,
 relaxButton,
 bottom {
   -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 ul {
@@ -95,6 +97,7 @@ app > bottom > relaxButton:active,
 app.relaxing > bottom > relaxButton {
   box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, .2);
   -webkit-animation: glow 1.5s ease-in-out infinite;
+  animation: glow 1.5s ease-in-out infinite;
 }
 
 @-webkit-keyframes glow {
@@ -103,12 +106,26 @@ app.relaxing > bottom > relaxButton {
   100% { background: #efe; border-color: #e8ffe8; }
 }
 
+@keyframes glow {
+  0%   { background: #efe; border-color: #e8ffe8; }
+  50%  { background: #fee; border-color: #ffe8e8; }
+  100% { background: #efe; border-color: #e8ffe8; }
+}
+
 app > bottom > relaxButton:active::before,
 app.relaxing > bottom > relaxButton::before {
   -webkit-animation: levitate 2s linear infinite;
+  animation: levitate 2s linear infinite;
 }
 
 @-webkit-keyframes levitate {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(0, -1pt); }
+  75%  { transform: translate(0, 1pt); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes levitate {
   0%   { transform: translate(0, 0); }
   25%  { transform: translate(0, -1pt); }
   75%  { transform: translate(0, 1pt); }
@@ -151,6 +168,8 @@ aVar > * {
 aConstraint > input,
 aVar > input {
   -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
   width: 100px;
   border: none;
   outline: none;
@@ -242,20 +261,36 @@ aConstraint.dirty > input {
 }
 
 aVar > lockButton {
-  content: url(images/noun_1560_cc.svg);
   width: 12pt;
   height: 12pt;
 }
 
-aVar.locked > lockButton {
-  content: url(images/noun_1559_cc.svg);
+aVar > lockButton::after {
+  display: inline-block;
   width: 12pt;
   height: 12pt;
+}
+
+aVar > lockButton::after {
+  content: url(images/noun_1560_cc.svg);
+}
+
+aVar.locked > lockButton::after {
+  content: url(images/noun_1559_cc.svg);
 }
 
 aConstraint > deleteButton,
 aVar > deleteButton {
+  width: 14pt;
+  height: 14pt;
+}
+
+aConstraint > deleteButton::after,
+aVar > deleteButton::after {
+  display: inline-block;
   content: url(images/noun_33853_cc.svg);
+  width: 14pt;
+  height: 14pt;
 }
 
 aVar > lockButton,
