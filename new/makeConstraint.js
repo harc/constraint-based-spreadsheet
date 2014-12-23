@@ -31,7 +31,8 @@ function makeConstraint(expr) {
     AddExpr_plus:   function(x, _, y) { return toErrorExpr(x) + ' + ' + toErrorExpr(y); },
     AddExpr_minus:  function(x, _, y) { return toErrorExpr(x) + ' - ' + toErrorExpr(y); },
     AddExpr:        function(expr)    { return toErrorExpr(expr); },
-    MulExpr_times:  function(x, _, y) { return toErrorExpr(x) + ' * ' + toErrorExpr(y); },
+    MulExpr_times1: function(x, y)    { return toErrorExpr(x) + ' * ' + toErrorExpr(y); },
+    MulExpr_times2: function(x, _, y) { return toErrorExpr(x) + ' * ' + toErrorExpr(y); },
     MulExpr_divide: function(x, _, y) { return toErrorExpr(x) + ' / ' + toErrorExpr(y); },
     MulExpr:        function(expr)    { return toErrorExpr(expr); },
     ExpExpr_exp:    function(x, _, y) { return 'Math.pow('+ toErrorExpr(x) + ', ' + toErrorExpr(y) + ')'; },
@@ -53,7 +54,7 @@ function makeConstraint(expr) {
       return;
     }
 
-    var node = grammar.matchContents(expr, 'Constraint');
+    var node = grammar.matchContents(withoutPrettyChars(expr), 'Constraint');
     var intervals = [];
     var collectIntervals = grammar.semanticAction({
       ident:     function(_, _) {

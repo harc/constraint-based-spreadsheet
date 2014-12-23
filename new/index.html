@@ -23,7 +23,8 @@ Grammar {
     | MulExpr
 
   MulExpr
-    = MulExpr '*' ExpExpr  -- times
+    = MulExpr     ident    -- times1
+    | MulExpr '*' ExpExpr  -- times2
     | MulExpr '/' ExpExpr  -- divide
     | ExpExpr
 
