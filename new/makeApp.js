@@ -1,5 +1,16 @@
 function makeApp() {
   var relaxButton, vars, constraints, addConstraintButton;
+
+  function makeIconInfo(name, url, author) {
+    return toDOM(
+      ['iconInfo',
+        '"', withAttributes(['a', name], {href: url}),
+        '" icon by ', author, ' from ',
+        withAttributes(['a', 'the Noun Project'], {href: 'http://thenounproject.com'}), '.'
+      ]
+    );
+  }
+
   var app = toDOM(
     ['app',
       vars = toDOM(['vars']),
@@ -7,6 +18,16 @@ function makeApp() {
         constraints = toDOM(['constraints']),
         addConstraintButton = toDOM(['addConstraintButton'])],
       ['bottom',
+        ['about',
+          ['contents',
+            ['main', ['appName', 'Relaxation-Based Spreadsheet'], ' by Alex Warth'],
+            makeIconInfo('Plus', 'http://thenounproject.com/term/plus/33942/', 'Berkay Sargin'),
+            makeIconInfo('Cross', 'http://thenounproject.com/term/cross/33853/', 'Berkay Sargin'),
+            makeIconInfo('Lock', 'http://thenounproject.com/term/lock/1559/', 'Ugur Akdemir'),
+            makeIconInfo('Unlock', 'http://thenounproject.com/term/unlock/1560/', 'Ugur Akdemir'),
+            makeIconInfo('Relax', 'http://thenounproject.com/term/relax/58521/', 'Claire Jones'),
+            makeIconInfo('Guru', 'http://thenounproject.com/term/guru/61520/', 'Icons8'),
+            makeIconInfo('Stress', 'http://thenounproject.com/term/stress/86100/', 'Aenne Brielmann')]],
         relaxButton = toDOM(['relaxButton'])]]
   );
 

@@ -309,3 +309,50 @@ aConstraint > deleteButton:hover {
   opacity: .8;
 }
 
+app about {
+  float: left;
+}
+
+app about::before {
+  font-size: 10pt;
+  color: #77e;
+  content: '[about]';
+}
+
+app about > contents {
+  display: none;
+}
+
+app about:hover::before {
+  display: none;
+}
+
+app about:hover > contents {
+  font-size: 10pt;
+  display: block;
+  background: #efe;
+  padding: 4pt;
+  border-radius: 4pt;
+  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, .2);
+}
+
+app about > contents main {
+  display: block;
+  margin-bottom: 4pt;
+}
+
+app about > contents iconInfo {
+  display: block;
+  font-size: 8pt;
+  color: #444;
+}
+
+app about > contents appName {
+  font-weight: bold;
+  color: #928f63;
+}
+
+app about > contents a {
+  text-decoration: none;
+}
+
