@@ -1,0 +1,64 @@
+<html>
+  <head>
+    <title>
+      Relaxation-Based Spreadsheet
+    </title>
+  </head>
+  <body>
+    <link href="index.css" rel="stylesheet"></style>
+    <script type="text/ohm-js" namespace="rbs">
+
+Grammar {
+  Constraint
+    = Expr '<' Expr  -- lt
+    | Expr '=' Expr  -- eq
+    | Expr '>' Expr  -- gt
+
+  Expr
+    = AddExpr
+
+  AddExpr
+    = AddExpr '+' MulExpr  -- plus
+    | AddExpr '-' MulExpr  -- minus
+    | MulExpr
+
+  MulExpr
+    = MulExpr '*' ExpExpr  -- times
+    | MulExpr '/' ExpExpr  -- divide
+    | ExpExpr
+
+  ExpExpr
+    = ExpExpr '^' PriExpr  -- exp
+    | PriExpr
+
+  PriExpr
+    = '(' Expr ')'  -- paren
+    | '+' PriExpr   -- pos
+    | '-' PriExpr   -- neg
+    | ident
+    | number
+
+  ident  -- identifier
+    = letter alnum*
+
+  number  -- number
+    = digit+ ('.' digit*)?  -- wholeAndFrac
+    | '.' digit+            -- onlyFrac
+}
+
+    </script>
+    <script src="lib/ohm.min.js"></script>
+    <script src="lib/toDOM.js"></script>
+    <script src="Relax.js"></script>
+    <script src="makeVar.js"></script>
+    <script src="makeConstraint.js"></script>
+    <script src="makeApp.js"></script>
+    <script>
+
+var app = makeApp();
+document.body.appendChild(app);
+
+    </script>
+  </body>
+</html>
+

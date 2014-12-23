@@ -1,0 +1,273 @@
+body,
+aVar,
+aVar > input,
+aConstraint > input,
+addConstraintButton,
+bottom,
+relaxButton {
+  font-family: "PT Sans", Arial, Helvetica, sans-serif;
+  font-size: 14pt;
+  color: #444;
+}
+
+aVar,
+aConstraint,
+addConstraintButton,
+relaxButton,
+bottom {
+  -webkit-user-select: none;
+}
+
+ul {
+  margin: 0;
+}
+
+app {
+  position: absolute;
+  top: 8pt;
+  bottom: 8pt;
+  left: 8pt;
+  right: 8pt;
+}
+
+app > vars,
+app > right,
+app > bottom {
+  display: inline-block;
+  position: absolute;
+}
+
+app > vars {
+  left: 0;
+  width: 300px;
+}
+
+app > right {
+  right: 0;
+  width: 400px;
+}
+
+app > right > addConstraintButton::before {
+  content: url(images/noun_33942_cc.svg);
+  opacity: .8;
+}
+
+app > right > addConstraintButton {
+  padding: 3pt;
+  background: #f0f0f0;
+}
+
+app > right > addConstraintButton:active {
+  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, .2);
+}
+
+app > right > addConstraintButton::after {
+  content: 'add constraint';
+}
+
+app > bottom {
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+app > bottom > relaxButton {
+  display: inline-block;
+  position: absolute;
+  min-width: 100px;
+  text-align: center;
+  right: 0pt;
+  bottom: 0pt;
+  padding: 1pt 2pt;
+  color: #ff3333;
+  font-size: 10pt;
+  border-radius: 10pt;
+  background: #fee;
+  border: 1px solid #ffe8e8;
+}
+
+app.relaxed > bottom > relaxButton {
+  background: #efe;
+  border: 1px solid #e8ffe8;
+}
+
+app > bottom > relaxButton:active,
+app.relaxing > bottom > relaxButton {
+  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, .2);
+  -webkit-animation: glow 1.5s ease-in-out infinite;
+}
+
+@-webkit-keyframes glow {
+  0%   { background: #efe; border-color: #e8ffe8; }
+  50%  { background: #fee; border-color: #ffe8e8; }
+  100% { background: #efe; border-color: #e8ffe8; }
+}
+
+app > bottom > relaxButton:active::before,
+app.relaxing > bottom > relaxButton::before {
+  -webkit-animation: levitate 2s linear infinite;
+}
+
+@-webkit-keyframes levitate {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(0, -1pt); }
+  75%  { transform: translate(0, 1pt); }
+  100% { transform: translate(0, 0); }
+}
+
+app > bottom > relaxButton::before {
+  display: block;
+  content: url(images/noun_86100_cc.svg);
+  opacity: .5;
+  padding-bottom: 2pt;
+}
+
+app.relaxed > bottom > relaxButton::before {
+  content: url(images/noun_58521_cc.svg);
+}
+
+app > bottom > relaxButton:hover::before,
+app.relaxing > bottom > relaxButton::before {
+  content: url(images/noun_61520.svg);
+  opacity: .8;
+}
+
+aConstraint,
+aVar,
+addConstraintButton,
+relaxButton {
+  display: inline-block;
+  box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, .5);
+  border-radius: 4pt;
+  margin-bottom: 6pt;
+  clear: both;
+}
+
+aConstraint > *,
+aVar > * {
+  padding: 0 1pt;
+}
+
+aConstraint > input,
+aVar > input {
+  -webkit-user-select: text;
+  width: 100px;
+  border: none;
+  outline: none;
+  background: none;
+  padding: 3pt 0pt;
+}
+
+aConstraint,
+addConstraintButton {
+  float: right;
+  background: #fbfbfb;
+  border: #f9f9f9;
+}
+
+aConstraint {
+  width: 325px;
+  overflow: hidden;
+}
+
+aConstraint > input {
+  color: #77e;
+  padding-left: 4pt;
+  width: 300px;
+}
+
+aConstraint > error {
+  display: none;
+}
+
+aConstraint.withError > error {
+  display: block;
+  padding: 2pt;
+  background: #fcf68b;
+  color: #928f63;
+  font-size: 12pt;
+  width: 100%;
+}
+
+aConstraint > error label {
+  font-weight: bold;
+}
+
+aConstraint > error description {
+  color: maroon;
+  font-weight: bold;
+}
+
+aConstraint > error light {
+  opacity: 0.5;
+}
+
+aConstraint > error literal {
+  white-space: nowrap;
+}
+
+aConstraint > error code {
+  opacity: 1;
+  color: maroon;
+  font-family: Monaco, "Lucida Console", monospace;
+}
+
+aVar {
+  float: left;
+  background: #f8f8f8;
+  border: #f5f5f5;
+}
+
+aVar.locked {
+  background: #f0f0f0;
+  color: #333;
+}
+
+aVar > name {
+  display: inline-block;
+  white-space: nowrap;
+  width: 75px;
+  max-width: 75px;
+}
+
+aVar > input {
+  color: #77e;
+  text-align: right;
+  width: 100px;
+}
+
+aVar.dirty > name,
+aVar.dirty > input,
+aConstraint.dirty > input {
+  color: #a33;
+}
+
+aVar > lockButton {
+  content: url(images/noun_1560_cc.svg);
+  width: 14pt;
+  height: 14pt;
+}
+
+aVar.locked > lockButton {
+  content: url(images/noun_1559_cc.svg);
+  width: 14pt;
+  height: 14pt;
+}
+
+aConstraint > deleteButton,
+aVar > deleteButton {
+  content: url(images/noun_33853_cc.svg);
+}
+
+aVar > lockButton,
+aVar > deleteButton,
+aConstraint > deleteButton {
+  opacity: .5;
+}
+
+aVar > lockButton:hover,
+aVar > deleteButton:hover,
+aConstraint > deleteButton:hover {
+  opacity: .8;
+}
+
