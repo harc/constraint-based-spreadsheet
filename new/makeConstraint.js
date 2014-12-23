@@ -103,13 +103,17 @@ function makeConstraint() {
   function toPrettyChar(charCode) {
     switch (charCode) {
       case 42: return '\u00D7';
+      case 45: return '\u2013';
       case 47: return '\u00F7';
       default: return undefined;
     }
   }
 
   function withoutPrettyChars(str) {
-    return str.replace(/\u00D7/g, '*').replace(/\u00F7/g, '/');
+    return str.
+        replace(/\u00D7/g, '*').
+        replace(/\u2013/g, '-').
+        replace(/\u00F7/g, '/');
   }
 
   exprField.onkeypress = function(e) {
