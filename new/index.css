@@ -53,7 +53,7 @@ app > right > addConstraintButton::before {
 }
 
 app > right > addConstraintButton {
-  padding: 3pt;
+  padding: 0 3pt;
   background: #f0f0f0;
 }
 
@@ -166,7 +166,6 @@ addConstraintButton {
 }
 
 aConstraint {
-  width: 325px;
   overflow: hidden;
 }
 
@@ -244,14 +243,14 @@ aConstraint.dirty > input {
 
 aVar > lockButton {
   content: url(images/noun_1560_cc.svg);
-  width: 14pt;
-  height: 14pt;
+  width: 12pt;
+  height: 12pt;
 }
 
 aVar.locked > lockButton {
   content: url(images/noun_1559_cc.svg);
-  width: 14pt;
-  height: 14pt;
+  width: 12pt;
+  height: 12pt;
 }
 
 aConstraint > deleteButton,
