@@ -1,10 +1,11 @@
-function makeConstraint(expr) {
+function makeConstraint() {
   var c = toDOM(
     ['aConstraint',
       withAttributes(['input'], {type: 'text'}),
       ['deleteButton'],
       ['error']]);
 
+  var expr = '';
   var exprField = c.childNodes[0];
   var deleteButton = c.childNodes[1];
   var errorField = c.childNodes[2];
@@ -183,7 +184,7 @@ function makeConstraint(expr) {
     exprField.focus();
   };
 
-  exprField.value = expr;
+  exprField.value = '';
   c.errorFn = function() { return 0; };
   updateView();
   return c;

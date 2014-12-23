@@ -58,7 +58,7 @@ function makeApp() {
   var varDict = {};
 
   function addConstraint() {
-    var constraint = makeConstraint('');
+    var constraint = makeConstraint();
     constraints.appendChild(constraint);
     errorFns.push(constraint.errorFn);
     relaxForUpTo(goodEffortTime);
