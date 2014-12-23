@@ -338,7 +338,7 @@ app about:hover > contents {
 
 app about > contents main {
   display: block;
-  margin-bottom: 4pt;
+  margin-bottom: 2pt;
 }
 
 app about > contents iconInfo {

@@ -23,9 +23,9 @@ Grammar {
     | MulExpr
 
   MulExpr
-    = MulExpr     ident    -- times1
-    | MulExpr '*' ExpExpr  -- times2
-    | MulExpr '/' ExpExpr  -- divide
+    = MulExpr ~('+' | '-') ExpExpr  -- times1
+    | MulExpr '*'          ExpExpr  -- times2
+    | MulExpr '/'          ExpExpr  -- divide
     | ExpExpr
 
   ExpExpr

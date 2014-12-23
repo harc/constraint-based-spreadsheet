@@ -95,7 +95,7 @@ function makeConstraint() {
       parse(exprField.value);
       this.blur();
     } else if (e.keyCode === ENTER) {
-      parse(exprField.value);
+      exprField.onchange();
     }
     updateView();
   };
