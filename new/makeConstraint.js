@@ -17,7 +17,7 @@ function makeConstraint() {
     var recordVarNames = grammar.semanticAction({
       ident:     function(_, _) { varName[this.interval.contents] = true; },
       _terminal: function()     {},
-      _default:  function()     { this.args.forEach(function(arg) { recordVarNames(arg); }); }
+      _default:  function()     { this.children.forEach(function(child) { recordVarNames(child); }); }
     });
     recordVarNames(node);
     c.varNames = Object.keys(varName);
@@ -64,7 +64,7 @@ function makeConstraint() {
                    }
                  },
       _terminal: function() {},
-      _default:  function() { this.args.forEach(function(arg) { collectIntervals(arg); }); }
+      _default:  function() { this.children.forEach(function(child) { collectIntervals(child); }); }
     });
     collectIntervals(node);
     if (intervals.length === 0) {
