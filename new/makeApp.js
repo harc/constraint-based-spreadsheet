@@ -21,7 +21,7 @@ function makeApp() {
         ['about',
           ['contents',
             ['main',
-              ['appName', 'Relaxation-Based Spreadsheet'], ' by ',
+              ['appName', 'Constraint-Based Spreadsheet'], ' by ',
               withAttributes(['a', 'Alex Warth'], {href: 'http://tinlizzie.org/~awarth'})],
             makeIconInfo('Plus', 'http://thenounproject.com/term/plus/33942/', 'Berkay Sargin'),
             makeIconInfo('Cross', 'http://thenounproject.com/term/cross/33853/', 'Berkay Sargin'),

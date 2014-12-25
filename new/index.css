@@ -193,9 +193,16 @@ aConstraint {
 }
 
 aConstraint > input {
-  color: #77e;
   padding-left: 4pt;
   width: 300px;
+}
+
+aConstraint > input {
+  color: #444;
+}
+
+aVar > input {
+  color: #77e;
 }
 
 aConstraint > error {
@@ -245,6 +252,10 @@ aVar.locked {
   color: #333;
 }
 
+aVar.locked > input {
+  color: #333;
+}
+
 aVar > name {
   display: inline-block;
   white-space: nowrap;
@@ -253,7 +264,6 @@ aVar > name {
 }
 
 aVar > input {
-  color: #77e;
   text-align: right;
   width: 100px;
 }
@@ -261,7 +271,7 @@ aVar > input {
 aVar.dirty > name,
 aVar.dirty > input,
 aConstraint.dirty > input {
-  color: #a33;
+  color: #c55;
 }
 
 aVar > lockButton {

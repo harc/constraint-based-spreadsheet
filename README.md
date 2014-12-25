@@ -23,3 +23,4 @@ The *Constraint-Based Spreadsheet* project is an attempt to make spreadsheets mo
 * Merge this project with RelaxCanvas so that the spreadsheet can generate graphs, etc.
     * The connection between the graph and the cells will be two-way, so the user can change the value of the cells by manipulating the graph directly.
 * Borrow some good ideas from [Lotus Improv](http://en.wikipedia.org/wiki/Lotus_Improv).
+
