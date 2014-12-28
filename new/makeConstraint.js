@@ -117,7 +117,7 @@ function makeConstraint() {
   }
 
   exprField.onkeypress = function(e) {
-    var pretty = toPrettyChar(e.keyCode);
+    var pretty = toPrettyChar(e.charCode);
     if (pretty !== undefined &&
         typeof this.selectionStart === 'number' && typeof this.selectionEnd == 'number') {
       var selectionStart = this.selectionStart;
