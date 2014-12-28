@@ -190,6 +190,7 @@ addConstraintButton {
 
 aConstraint {
   overflow: hidden;
+  max-width: 322px;
 }
 
 aConstraint > input {
@@ -215,7 +216,6 @@ aConstraint.withError > error {
   background: #fcf68b;
   color: #928f63;
   font-size: 12pt;
-  width: 100%;
 }
 
 aConstraint > error label {
