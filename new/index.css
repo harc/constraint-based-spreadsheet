@@ -321,6 +321,7 @@ aConstraint > deleteButton:hover {
 
 app about {
   float: left;
+  cursor: default;
 }
 
 app about::before {
@@ -364,5 +365,13 @@ app about > contents appName {
 
 app about > contents a {
   text-decoration: none;
+}
+
+
+addConstraintButton,
+deleteButton,
+lockButton,
+relaxButton {
+  cursor: pointer;
 }
 
