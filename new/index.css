@@ -1,27 +1,13 @@
-body,
-aVar,
-aVar > input,
-aConstraint > input,
-addConstraintButton,
-bottom,
-relaxButton {
+body, aVar, input, addConstraintButton, bottom, relaxButton {
   font-family: "PT Sans", Arial, Helvetica, sans-serif;
   font-size: 14pt;
   color: #444;
 }
 
-aVar,
-aConstraint,
-addConstraintButton,
-relaxButton,
-bottom {
+aVar, aConstraint, addConstraintButton, relaxButton, bottom {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
-}
-
-ul {
-  margin: 0;
 }
 
 app {
@@ -32,48 +18,46 @@ app {
   right: 8pt;
 }
 
-app > left,
-app > right,
-app > bottom {
+left, right, bottom {
   display: inline-block;
   position: absolute;
 }
 
-app > left {
+left {
   left: 0;
   width: 300px;
 }
 
-app > right {
+right {
   right: 0;
   width: 400px;
 }
 
-app > right > addConstraintButton::before {
+addConstraintButton::before {
   content: url(images/noun_33942_cc.svg);
   opacity: .8;
 }
 
-app > right > addConstraintButton {
+addConstraintButton {
   padding: 0 3pt;
-  background: #f0f0f0;
+  background: #eef;
 }
 
-app > right > addConstraintButton:active {
+addConstraintButton:active {
   box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, .2);
 }
 
-app > right > addConstraintButton::after {
+addConstraintButton::after {
   content: 'add constraint';
 }
 
-app > bottom {
+bottom {
   left: 0;
   right: 0;
   bottom: 0;
 }
 
-app > bottom > relaxButton {
+relaxButton {
   display: inline-block;
   position: absolute;
   min-width: 100px;
@@ -88,13 +72,12 @@ app > bottom > relaxButton {
   border: 1px solid #ffe8e8;
 }
 
-app.relaxed > bottom > relaxButton {
+app.relaxed relaxButton {
   background: #efe;
   border: 1px solid #e8ffe8;
 }
 
-app > bottom > relaxButton:active,
-app.relaxing > bottom > relaxButton {
+app relaxButton:active, app.relaxing relaxButton {
   box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, .2);
   -webkit-animation: glow 1.5s ease-in-out infinite;
   animation: glow 1.5s ease-in-out infinite;
@@ -112,8 +95,7 @@ app.relaxing > bottom > relaxButton {
   100% { background: #efe; border-color: #e8ffe8; }
 }
 
-app > bottom > relaxButton:active::before,
-app.relaxing > bottom > relaxButton::before {
+app relaxButton:active::before, app.relaxing relaxButton::before {
   -webkit-animation: levitate 2s linear infinite;
   animation: levitate 2s linear infinite;
 }
@@ -132,45 +114,38 @@ app.relaxing > bottom > relaxButton::before {
   100% { transform: translate(0, 0); }
 }
 
-app > bottom > relaxButton::before {
+app relaxButton::before {
   display: block;
   content: url(images/noun_86100_cc.svg);
   opacity: .5;
   padding-bottom: 2pt;
 }
 
-app.relaxed > bottom > relaxButton::before {
+app.relaxed relaxButton::before {
   content: url(images/noun_58521_cc.svg);
 }
 
-app > bottom > relaxButton:hover::before,
-app.relaxing > bottom > relaxButton::before {
+app relaxButton:hover::before, app.relaxing relaxButton::before {
   content: url(images/noun_61520.svg);
   opacity: .8;
 }
 
-aConstraint,
-aVar,
-addConstraintButton,
-relaxButton {
+aConstraint, aVar, addConstraintButton, relaxButton {
   display: inline-block;
   box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, .5);
   border-radius: 4pt;
   clear: both;
 }
 
-aConstraint,
-aVar {
+aConstraint, aVar {
   margin-bottom: 6pt;
 }
 
-aConstraint > *,
-aVar > * {
+aConstraint > *, aVar > * {
   padding: 0 1pt;
 }
 
-aConstraint > input,
-aVar > input {
+input {
   -webkit-user-select: text;
   -moz-user-select: text;
   user-select: text;
@@ -181,16 +156,15 @@ aVar > input {
   padding: 3pt 0pt;
 }
 
-aConstraint,
-addConstraintButton {
+aConstraint, addConstraintButton {
   float: right;
-  background: #fbfbfb;
   border: #f9f9f9;
 }
 
 aConstraint {
   overflow: hidden;
   max-width: 322px;
+  background: #fbfbfb;
 }
 
 aConstraint > input {
@@ -268,9 +242,7 @@ aVar > input {
   width: 100px;
 }
 
-aVar.dirty > name,
-aVar.dirty > input,
-aConstraint.dirty > input {
+aVar.dirty > name, aVar.dirty > input, aConstraint.dirty > input {
   color: #c55;
 }
 
@@ -293,52 +265,48 @@ aVar.locked > lockButton::after {
   content: url(images/noun_1559_cc.svg);
 }
 
-aConstraint > deleteButton,
-aVar > deleteButton {
+aConstraint > deleteButton, aVar > deleteButton {
   width: 14pt;
   height: 14pt;
 }
 
-aConstraint > deleteButton::after,
-aVar > deleteButton::after {
+aConstraint > deleteButton::after, aVar > deleteButton::after {
   display: inline-block;
   content: url(images/noun_33853_cc.svg);
   width: 14pt;
   height: 14pt;
 }
 
-aVar > lockButton,
-aVar > deleteButton,
-aConstraint > deleteButton {
+aVar > lockButton, aVar > deleteButton, aConstraint > deleteButton {
   opacity: .5;
 }
 
-aVar > lockButton:hover,
-aVar > deleteButton:hover,
-aConstraint > deleteButton:hover {
+aVar > lockButton:hover, aVar > deleteButton:hover, aConstraint > deleteButton:hover {
   opacity: .8;
 }
 
 app about {
+  display: inline-block;
+  max-width: 300px;
   float: left;
   cursor: default;
 }
 
-app about::before {
+about::before {
   font-size: 10pt;
   color: #77e;
   content: '[about]';
 }
 
-app about > contents {
+about contents {
   display: none;
 }
 
-app about:hover::before {
+about:hover::before {
   display: none;
 }
 
-app about:hover > contents {
+about:hover contents {
   font-size: 10pt;
   display: block;
   background: #efe;
@@ -347,31 +315,31 @@ app about:hover > contents {
   box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, .2);
 }
 
-app about > contents main {
+about contents main {
   display: block;
   margin-bottom: 2pt;
 }
 
-app about > contents iconInfo {
+iconInfo {
   display: block;
   font-size: 8pt;
   color: #444;
 }
 
-app about > contents appName {
+about appName {
   font-weight: bold;
   color: #928f63;
 }
 
-app about > contents a {
+about contents a {
   text-decoration: none;
 }
 
-
-addConstraintButton,
-deleteButton,
-lockButton,
-relaxButton {
+addConstraintButton, deleteButton, lockButton, relaxButton {
   cursor: pointer;
+}
+
+icons {
+  font-size: 8pt;
 }
 
