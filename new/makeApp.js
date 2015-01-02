@@ -13,7 +13,8 @@ function makeApp() {
 
   var app = toDOM(
     ['app',
-      vars = toDOM(['vars']),
+      ['left',
+        vars = toDOM(['vars'])],
       ['right',
         constraints = toDOM(['constraints']),
         addConstraintButton = toDOM(['addConstraintButton'])],

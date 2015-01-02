@@ -32,14 +32,14 @@ app {
   right: 8pt;
 }
 
-app > vars,
+app > left,
 app > right,
 app > bottom {
   display: inline-block;
   position: absolute;
 }
 
-app > vars {
+app > left {
   left: 0;
   width: 300px;
 }
