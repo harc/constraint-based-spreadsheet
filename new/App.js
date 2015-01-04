@@ -28,7 +28,7 @@ App.init = function() {
   var varDict = {};
 
   function addConstraint() {
-    var constraint = makeConstraint();
+    var constraint = App.Constraint.create();
     $('constraints').append(constraint);
     errorFns.push(constraint.errorFn);
     relaxForUpTo(App.GOOD_EFFORT_TIME_MS);
@@ -52,14 +52,14 @@ App.init = function() {
   }
 
   function addVar(name) {
-    var aVar = makeVar(name, 0);
+    var aVar = App.Var.create(name, 0);
     $('vars').append(aVar);
     varDict[name] = aVar;
 
     var lockButtonClickCount = 0;
-    $(aVar).on('lockbuttonclick', function(e) {
+    $(aVar).on('lockbuttonclick', function() {
       lockButtonClickCount++;
-      if (!e.originalEvent.detail.locked) {
+      if (!aVar.locked) {
         relaxForUpTo(App.GOOD_EFFORT_TIME_MS);
       }
     });
@@ -81,6 +81,7 @@ App.init = function() {
 
     $(aVar).on('delete', function() {
       $('aConstraint').each(function() { this.inlineVar(aVar.name, aVar.value); });
+      delete varDict[name];
     });
   }
 
