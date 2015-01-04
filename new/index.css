@@ -35,6 +35,8 @@ right {
 
 addConstraintButton::before {
   content: url(images/noun_33942_cc.svg);
+  width: 12pt;
+  height: 12pt;
   opacity: .8;
 }
 
@@ -164,7 +166,8 @@ aConstraint, addConstraintButton {
 aConstraint {
   overflow: hidden;
   max-width: 322px;
-  background: #fbfbfb;
+  _background: #fbfbfb;
+  background: #efe;
 }
 
 aConstraint > input {
@@ -253,16 +256,15 @@ aVar > lockButton {
 
 aVar > lockButton::after {
   display: inline-block;
+  content: url(images/noun_1560_cc.svg);
   width: 12pt;
   height: 12pt;
 }
 
-aVar > lockButton::after {
-  content: url(images/noun_1560_cc.svg);
-}
-
 aVar.locked > lockButton::after {
   content: url(images/noun_1559_cc.svg);
+  width: 12pt;
+  height: 12pt;
 }
 
 aConstraint > deleteButton, aVar > deleteButton {
