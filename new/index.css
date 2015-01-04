@@ -42,7 +42,7 @@ addConstraintButton::before {
 
 addConstraintButton {
   padding: 0 3pt;
-  background: #eef;
+  background: #f8f8f8;
 }
 
 addConstraintButton:active {
@@ -62,16 +62,28 @@ bottom {
 relaxButton {
   display: inline-block;
   position: absolute;
-  min-width: 100px;
+  _min-width: 100px;
   text-align: center;
   right: 0pt;
   bottom: 0pt;
   padding: 1pt 2pt;
-  color: #ff3333;
-  font-size: 10pt;
   border-radius: 10pt;
   background: #fee;
   border: 1px solid #ffe8e8;
+  color: #777;
+}
+
+errorValue {
+  padding-left: 2px;
+  color: #ff3333;
+}
+
+relaxButton::before {
+  display: inline-block;
+  content: url(images/noun_32380_cc.svg);
+  opacity: .5;
+  width: 12pt;
+  height: 12pt;
 }
 
 app.relaxed relaxButton {
@@ -97,7 +109,7 @@ app relaxButton:active, app.relaxing relaxButton {
   100% { background: #efe; border-color: #e8ffe8; }
 }
 
-app relaxButton:active::before, app.relaxing relaxButton::before {
+app relaxButton:active::after, app.relaxing relaxButton::after {
   -webkit-animation: levitate 2s linear infinite;
   animation: levitate 2s linear infinite;
 }
@@ -116,18 +128,19 @@ app relaxButton:active::before, app.relaxing relaxButton::before {
   100% { transform: translate(0, 0); }
 }
 
-app relaxButton::before {
-  display: block;
+app relaxButton::after {
+  display: inline-block;
+  padding-left: 2pt;
   content: url(images/noun_86100_cc.svg);
   opacity: .5;
   padding-bottom: 2pt;
 }
 
-app.relaxed relaxButton::before {
+app.relaxed relaxButton::after {
   content: url(images/noun_58521_cc.svg);
 }
 
-app relaxButton:hover::before, app.relaxing relaxButton::before {
+app relaxButton:hover::after, app.relaxing relaxButton::after {
   content: url(images/noun_61520.svg);
   opacity: .8;
 }
@@ -166,7 +179,6 @@ aConstraint, addConstraintButton {
 aConstraint {
   overflow: hidden;
   max-width: 322px;
-  _background: #fbfbfb;
   background: #efe;
 }
 
@@ -247,6 +259,7 @@ aVar > input {
 
 aVar.dirty > name, aVar.dirty > input, aConstraint.dirty > input {
   color: #c55;
+  font-weight: bold;
 }
 
 aVar > lockButton {

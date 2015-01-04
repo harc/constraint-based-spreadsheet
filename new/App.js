@@ -14,7 +14,7 @@ App.init = function() {
   $(document.body).mouseup(function() { relaxButtonDown = false; });
 
   function setError(error) {
-    $('relaxButton').text(error.toFixed(5));
+    $('errorValue').text(error.toFixed(5));
   }
 
   var relaxingUntilTime = 0;
