@@ -169,6 +169,7 @@ input {
   outline: none;
   background: none;
   padding: 3pt 0pt;
+  text-overflow: ellipsis;
 }
 
 aConstraint, addConstraintButton {
