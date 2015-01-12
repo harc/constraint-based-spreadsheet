@@ -44,8 +44,7 @@ App.init = function() {
     });
 
     $(constraint).on('delete', function() {
-      errorFns.splice($(constraint).index(), 1);
-      relaxForUpTo(App.GOOD_EFFORT_TIME_MS);
+      deleteConstraint(constraint);
     });
 
     return constraint;
@@ -80,9 +79,21 @@ App.init = function() {
     });
 
     $(aVar).on('delete', function() {
-      $('aConstraint').each(function() { this.inlineVar(aVar.name, aVar.value); });
+      $('aConstraint').each(function() {
+        this.inlineVar(aVar.name, aVar.value);
+        if (this.varNames.length === 0) {
+          deleteConstraint(this);
+        }
+      });
       delete varDict[name];
+      $(aVar).remove();
     });
+  }
+
+  function deleteConstraint(constraint) {
+    errorFns.splice($(constraint).index(), 1);
+    $(constraint).remove();
+    relaxForUpTo(App.GOOD_EFFORT_TIME_MS);
   }
 
   setError(0);

@@ -80,7 +80,6 @@ App.Var = {
 
     $deleteButton.click(function() {
       $self.trigger('delete');
-      $self.remove();
     });
 
     function isAllHashes(str) {

@@ -42,7 +42,6 @@ App.Constraint = {
 
     $deleteButton.click(function() {
       $self.trigger('delete');
-      $self.remove();
     });
 
     self.focus = function() {
