@@ -3,6 +3,10 @@
 TODO:
 
 * UI improvements
+  -- Remove error value from error display widget at the bottom right
+     (it doesn't help, just show the guy relaxed or stressed out)
+  -- Show history of the values for each variable widget as a chart in
+     each widgets' background. (Something like Aran's "lava lamp" charts.)
   -- Add locking functionality for variable widgets
      (Will want nice locked / unlocked icons.)
   -- Add play/pause button to constraint widgets
@@ -448,7 +452,6 @@ Relax.prototype.iterateForUpTo = function(tMillis) {
       if (typeof d !== 'number') {
         continue;
       }
-console.log('delta', v, '=', d / numDeltas);
       this.vars[v] += d / numDeltas;
     }
     count++;
