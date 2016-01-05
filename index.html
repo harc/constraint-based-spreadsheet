@@ -1,170 +1,41 @@
-<!--
-
-TODO:
-
-* UI improvements
-  -- Remove error value from error display widget at the bottom right
-     (it doesn't help, just show the guy relaxed or stressed out)
-  -- Show history of the values for each variable widget as a chart in
-     each widgets' background. (Something like Aran's "lava lamp" charts.)
-  -- Add locking functionality for variable widgets
-     (Will want nice locked / unlocked icons.)
-  -- Add play/pause button to constraint widgets
-     (Will want nice icons for that too.)
-
-* Behind the scenes
-  -- Do van Overveldian thing where you change all vars atomically, each only 1/4 as much
-  -- Clean up / refactor code
-    * should have a library for doing Sutherland-style relaxation, w/o a UI
-    * write the current demo using that library
-  -- Make the library work on objects, not just scalar-valued variables
-     (Should be able to make a geometric relaxation demo using the library.)
-
--->
-
 <html>
   <head>
-    <style>
+    <title>
+      Constraint-Based Spreadsheet
+    </title>
+  </head>
+  <body>
+    <link href="index.css" rel="stylesheet"></style>
+    <script type="text/ohm-js" namespace="rbs">
 
-body {
-  font-family: "PT Sans", Arial, Helvetica, sans-serif;
-  font-size: 20pt;
-}
-
-variable, constraint, addConstraintButton {
-  display: inline-block;
-  box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, .4);
-  border-radius: 4px;
-  overflow: hidden;
-  margin: 4pt;
-  clear: both;
-  cursor: default;
-}
-
-variable {
-  float: left;
-}
-
-variable > *,
-constraint > * {
-  padding: 6px;
-}
-
-variable > value {
-  cursor: text;
-}
-
-variable.dirty > value,
-constraint.dirty > expr {
-  font-weight: bold;
-}
-
-variable > name {
-  -webkit-user-select: none;
-  border-right: none;
-  background: beige;
-}
-
-variable.locked > name {
-  background: #dfdfdf;
-}
-
-variable > value {
-  border-left: none;
-  background: aliceblue;
-  outline: none;
-}
-
-bottomRightDiv {
-  display: inline-block;
-  width: 400px;
-  text-align: right;
-  position: absolute;
-  bottom: 10pt;
-  right: 10pt;
-}
-
-#loading {
-  visibility: hidden;
-  margin-bottom: 6px;
-}
-
-#error {
-  float: none;
-}
-
-#error > name {
-  color: aliceblue;
-  background: #cb0000;
-}
-
-variable > deleteButton,
-constraint > deleteButton {
-  background: #cb0000;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-}
-
-constraint > expr {
-  background: beige;
-  outline: none;
-  padding-right: 10pt;
-}
-
-constraints {
-  float: right;
-  display: inline-block;
-  position: absolute;
-  top: 10pt;
-  right: 10pt;
-}
-
-constraints > * {
-  float: right;
-}
-
-#varWidgetsDiv {
-  margin-top: 10pt;
-}
-
-addConstraintButton {
-  display: inline-block;
-  padding: 2pt;
-  background: aliceblue;
-}
-
-addConstraintButton::after {
-  content: 'new constraint';
-}
-
-    </style>
-    <script src=variable-widget.js></script>
-    <script src=constraint-widget.js></script>
-    <script src=ohm.min.js></script>
-    <script type="text/ohm-js" id="grammar">
-
-G {
+Grammar {
   Constraint
-    = Expr:x '=' Expr:y
+    = Expr '<' Expr  -- lt
+    | Expr '=' Expr  -- eq
+    | Expr '>' Expr  -- gt
 
   Expr
     = AddExpr
 
   AddExpr
-    = AddExpr:x '+':op MulExpr:y  -- plus
-    | AddExpr:x '-':op MulExpr:y  -- minus
+    = AddExpr '+' MulExpr  -- plus
+    | AddExpr '-' MulExpr  -- minus
     | MulExpr
 
   MulExpr
-    = MulExpr:x '*':op PriExpr:y  -- times
-    | MulExpr:x '/':op PriExpr:y  -- divide
-    | MulExpr:x '%':op PriExpr:y  -- modulus
+    = MulExpr ~('+' | '-') ExpExpr  -- times1
+    | MulExpr '*'          ExpExpr  -- times2
+    | MulExpr '/'          ExpExpr  -- divide
+    | ExpExpr
+
+  ExpExpr
+    = ExpExpr '^' PriExpr  -- exp
     | PriExpr
 
   PriExpr
-    = '(':open Expr:e ')':close   -- paren
-    | '+':sign PriExpr:e          -- pos
-    | '-':sign PriExpr:e          -- neg
+    = '(' Expr ')'  -- paren
+    | '+' PriExpr   -- pos
+    | '-' PriExpr   -- neg
     | ident
     | number
 
@@ -172,339 +43,66 @@ G {
     = letter alnum*
 
   number  -- number
-    = digit+ ('.' digit*)?
-    | '.' digit+
+    = digit+ ('.' digit*)?  -- wholeAndFrac
+    | '.' digit+            -- onlyFrac
 }
 
     </script>
-    <script src=syntax.js></script>
+    <script src="lib/ohm.min.js"></script>
+    <script src="lib/jquery-2.1.3.min.js"></script>
+    <script src="Relax.js"></script>
+    <script src="App.js"></script>
+    <script src="Constraint.js"></script>
+    <script src="Var.js"></script>
+    <app>
+      <left>
+        <vars></vars>
+      </left>
+      <right>
+        <constraints></constraints>
+        <addConstraintButton></addConstraintButton>
+      </right>
+      <bottom>
+        <about>
+          <contents>
+            <main>
+              <appName>Constraint-Based Spreadsheet</appName>
+              by
+              <a href="http://tinlizzie.org/~awarth">Alex Warth</a>
+            </main>
+            <icons>
+              <b>Icon credits:</b><br>
+
+              "<a href="http://thenounproject.com/term/plus/33942/">Plus</a>" and
+              "<a href="http://thenounproject.com/term/cross/33853/">Cross</a>" icons
+              by Berkay Sargin,
+
+              "<a href="http://thenounproject.com/term/lock/1559/">Lock</a>" and
+              "<a href="http://thenounproject.com/term/unlock/1560/">Unlock</a>" icons
+              by Ugur Akdemir,
+
+              "<a href="http://thenounproject.com/term/warning/32380/">Warning</a>" icon
+              by Stefan Parnarov,
+
+              "<a href="http://thenounproject.com/term/relax/58521/">Relax</a>" icon
+              by Claire Jones,
+
+              "<a href="http://thenounproject.com/term/guru/61520/">Guru</a>" icon
+              by Icons8,
+
+              "<a href="http://thenounproject.com/term/stress/86100/">Stress</a>" icon
+              by Aenne Brielmann
+
+              from <a href="http://thenounproject.com">the Noun Project</a>.
+            </icons>
+          </contents>
+        </about>
+        <relaxButton>=<errorValue></errorValue></relaxButton>
+      </bottom>
+    </app>
     <script>
 
-// Sutherland-Style Relaxation
-
-function Relax() {
-  var self = this;
-
-  this.vars = {};
-  this.varWidgets = {};
-  this.locked = {};
-  this.constraints = [];
-  this.useOnePassMethod = false;
-  this.shouldRelax = false;
-
-  this.errorWidget = VariableWidget.create(this, 'error', 0, false, true);
-  this.errorWidget.setAttribute('id', 'error');
-
-  this.addConstraintButton = document.createElement('addConstraintButton');
-  this.addConstraintButton.addEventListener(
-      'click',
-      function() {
-        var c = self.addConstraint('0 = 0');
-        var widgets = document.body.getElementsByTagName('constraint');
-        var widget = widgets[widgets.length - 1];
-        widget.firstChild.innerHTML = '';
-        widget.firstChild.focus();
-      },
-      false
-  );
-  this.updateConstraintsView();
-
-  setInterval(
-      function() {
-        if (self.shouldRelax) {
-          self.iterateForUpTo(self.shortWaitMillis);
-        }
-      },
-      this.shortWaitMillis * 2
-  );
-}
-
-Relax.prototype.epsilon = 0.01;
-Relax.prototype.tinyDelta = 0.00001;
-
-Relax.prototype.maxIterationsForOnePassMethodSolver = 1000;
-
-Relax.prototype.shortWaitMillis = 20;
-Relax.prototype.mediumWaitMillis = 200;
-Relax.prototype.longWaitMillis = 1000;
-
-Relax.prototype.updateVarsView = function() {
-  var self = this;
-  Object.keys(this.vars).forEach(function(v) {
-    var varWidget = self.varWidgets[v];
-    if (!varWidget) {
-      varWidget = self.varWidgets[v] = VariableWidget.create(self, v, 0);
-      varWidgetsDiv.appendChild(varWidget);
-      varWidget.addEventListener('valuechange', self.varValueChangeHandler.bind(self), false);
-      varWidget.addEventListener('lockedchange', self.varLockedChangeHandler.bind(self), false);
-      varWidget.addEventListener('delete', self.varDeleteHandler.bind(self), false);
-    }
-    if (varWidget.value !== self.vars[v]) {
-      varWidget.setValue(self.vars[v]);
-    }
-  });
-};
-
-Relax.prototype.varValueChangeHandler = function(e) {
-  var name = e.target.name;
-  var value = e.detail.newValue;
-  this.vars[name] = value;
-  var oldLocked = this.locked[name];
-  this.locked[name] = true;
-  this.iterateForUpTo(this.mediumWaitMillis);
-  this.locked[name] = oldLocked;
-};
-
-Relax.prototype.varLockedChangeHandler = function(e) {
-  var name = e.target.name;
-  var locked = e.detail.locked;
-  this.locked[name] = locked;
-  if (this.getError() > this.epsilon) {
-    this.iterateForUpTo(this.mediumWaitMillis);
-  }
-};
-
-Relax.prototype.varDeleteHandler = function(e) {
-  this.removeVar(e.detail.variable);
-};
-
-Relax.prototype.updateConstraintsView = function() {
-  var self = this;
-  var constraintsDiv = document.getElementsByTagName('constraints')[0];
-  while (constraintsDiv.firstChild) {
-    constraintsDiv.removeChild(constraintsDiv.firstChild);
-  }
-  this.constraints.forEach(function(c) {
-    var widget = ConstraintWidget.create(c);
-    widget.addEventListener('valuechange', self.constraintValueChangeHandler.bind(self), false);
-    widget.addEventListener('delete', self.constraintDeleteHandler.bind(self), false);
-    constraintsDiv.appendChild(widget);
-  });
-  constraintsDiv.appendChild(this.addConstraintButton);
-};
-
-Relax.prototype.constraintValueChangeHandler = function(e) {
-  this.constraintChanged(e.target.constraint);
-  this.iterateForUpTo(this.mediumWaitMillis);
-};
-
-Relax.prototype.constraintDeleteHandler = function(e) {
-  this.removeConstraint(e.detail.constraint);
-};
-
-Relax.prototype.addVar = function(v, optValue) {
-  if (!this.vars.hasOwnProperty(v)) {
-    this.vars[v] = optValue || 0;
-  }
-};
-
-Relax.prototype.removeVar = function(v) {
-  var self = this;
-  var value = this.varWidgets[v].renderedValue;
-  this.varWidgets[v].parentElement.removeChild(this.varWidgets[v]);
-  delete this.varWidgets[v];
-  delete this.vars[v];
-  delete this.locked[v];
-  this.constraints.forEach(function(c) {
-    if (c.killVar(v, value)) {
-      self.constraintChanged(c);
-    }
-  });
-};
-
-Relax.prototype.addConstraints = function(/* str1, str2, ... */) {
-  for (var idx = 0; idx < arguments.length; idx++) {
-    this.addConstraint(arguments[idx]);
-  }
-  this.iterateForUpTo(this.longWaitMillis);
-};
-
-Relax.prototype.addConstraint = function(str, optWeight) {
-  var c = ConstraintLanguage.constraintFromString(str, optWeight);
-  this.constraints.push(c);
-  this.constraintChanged(c);
-  return c;
-};
-
-Relax.prototype.constraintChanged = function(c) {
-  var self = this;
-  c.vars.forEach(function(v) {
-    self.addVar(v);
-  });
-  this.updateVarsView();
-  this.updateConstraintsView();
-};
-
-Relax.prototype.removeConstraint = function(unwantedConstraint) {
-  this.constraints = this.constraints.filter(function(c) { return c !== unwantedConstraint; });
-  this.updateVarsView();
-  this.updateConstraintsView();
-};
-
-Relax.prototype.getError = function(optConstraints) {
-  var self = this;
-  return (optConstraints || this.constraints)
-      .map(function(c) { return c.errorFn(self.vars); })
-      .reduce(function(e1, e2) { return e1 + e2; }, 0);
-};
-
-Relax.prototype.derivative = function(c, v) {
-  var self = this;
-  var origValue = this.vars[v];
-
-  function calcDerivative(x0, x1) {
-    self.vars[v] = x0;
-    var y0 = c.errorFn(self.vars);
-    self.vars[v] = x1;
-    var y1 = c.errorFn(self.vars);
-    self.vars[v] = origValue;
-    return (y1 - y0) / (x1 - x0);
-  }
-
-  var m = calcDerivative(origValue - this.tinyDelta, origValue + this.tinyDelta);
-  if (Math.abs(m) < this.tinyDelta) {
-    m = calcDerivative(origValue, origValue + this.tinyDelta);
-  }
-  if (Math.abs(m) < this.tinyDelta) {
-    m = calcDerivative(origValue - this.tinyDelta, origValue);
-  }
-  return m;
-};
-
-Relax.prototype.adjustVarForConstraint = function(v, c) {
-  var count = 0;
-  while (count++ < this.maxIterationsForOnePassMethodSolver && c.errorFn(this.vars) > this.epsilon) {
-    var m = this.derivative(c, v);
-    var b = c.errorFn(this.vars) - m * this.vars[v];
-    var value = -b / m;
-    if (isFinite(value)) {
-      this.vars[v] = value;
-    } else {
-      break;
-    }
-  }
-  return c.errorFn(this.vars) <= this.epsilon;
-};
-
-Relax.prototype.computeDelta = function(v, cs) {
-  var self = this;
-  var mbs = 0;
-  var mms = 0;
-  cs.forEach(function(c) {
-    var m = self.derivative(c, v);
-    var b = c.errorFn(self.vars) - m * self.vars[v];
-    mbs += m * b;
-    mms += m * m;
-  });
-  var newValue = -mbs / mms;
-  return isFinite(newValue) ? newValue - self.vars[v] : undefined;
-};
-
-Relax.prototype.iterateForUpTo = function(tMillis) {
-  var self = this;
-  var constraintsForRelaxation = this.constraints.slice();
-  var vars = Object.keys(this.vars).filter(function(v) { return !self.locked[v]; });
-
-  if (this.useOnePassMethod) {
-    var computeStack = [];
-    var didSomething;
-    do {
-      didSomething = false;
-      vars.forEach(function(v) {
-        if (self.locked[v]) {
-          return;
-        }
-        var numConstraintsFound = 0;
-        var theConstraint;
-        constraintsForRelaxation.forEach(function(c) {
-          if (c.vars.indexOf(v) >= 0) {
-            theConstraint = c;
-            numConstraintsFound++;
-          }
-        });
-        if (numConstraintsFound == 1 && theConstraint.vars.length > 1) {
-          computeStack.push({variable: v, constraint: theConstraint});
-          constraintsForRelaxation = constraintsForRelaxation.filter(function(c) { return c !== theConstraint; });
-          didSomething = true;
-        }
-      });
-    } while(didSomething);
-  }
-
-  vars = {};
-  constraintsForRelaxation.forEach(function(c) {
-    c.vars.forEach(function(v) {
-      if (!self.locked[v]) {
-        vars[v] = true;
-      }
-    });
-  });
-  vars = Object.keys(vars);
-
-  var t0 = Date.now();
-  var count = 0;
-  while (this.getError(constraintsForRelaxation) > this.epsilon && (Date.now() - t0) < tMillis) {
-    var deltas = vars.map(function(v) { return self.computeDelta(v, constraintsForRelaxation); });
-    var numDeltas = deltas.filter(function(d) { return typeof d === 'number'; }).length;
-    for (var idx = 0; idx < vars.length; idx++) {
-      var v = vars[idx];
-      var d = deltas[idx];
-      if (typeof d !== 'number') {
-        continue;
-      }
-      this.vars[v] += d / numDeltas;
-    }
-    count++;
-  }
-
-  if (this.useOnePassMethod) {
-    while (computeStack.length > 0) {
-      var entry = computeStack.pop();
-      this.adjustVarForConstraint(entry.variable, entry.constraint);
-    }
-  }
-
-  var error = this.getError();
-  this.errorWidget.setValue(error);
-  this.shouldRelax = error > this.epsilon;
-  this.loading.style.visibility = this.shouldRelax ? 'visible' : 'hidden';
-
-  if (error > this.epsilon) {
-    vars.forEach(function(v) {
-      if (!self.locked[v]) {
-        var sign = Math.random() < 0.5 ? -1 : 1;
-        self.vars[v] += sign * self.epsilon;
-      }
-    });
-  }
-
-  this.updateVarsView();
-
-  return count;
-};
-
-    </script>
-  </head>
-  <body>
-    <constraints>
-    </constraints>
-    <div id="varWidgetsDiv"></div>
-    <bottomRightDiv>
-      <img src="loading.gif" id="loading">
-    </bottomRightDiv>
-    <script>
-
-var relax = new Relax();
-document.getElementsByTagName('bottomRightDiv')[0].appendChild(relax.errorWidget);
-relax.loading = document.getElementById('loading');
-relax.loading.addEventListener(
-    'click',
-    function(e) {
-      relax.shouldRelax = false;
-      relax.loading.style.visibility = 'hidden';
-    },
-    false
-);
+App.init();
 
     </script>
   </body>
