@@ -24,3 +24,6 @@ The *Constraint-Based Spreadsheet* project is an attempt to make spreadsheets mo
     * The connection between the graph and the cells will be two-way, so the user can change the value of the cells by manipulating the graph directly.
 * Borrow some good ideas from [Lotus Improv](http://en.wikipedia.org/wiki/Lotus_Improv).
 
+## Authors
+
+* [Alex Warth](http://github.com/alexwarth)
