@@ -1,4 +1,7 @@
-# Constraint-Based Spreadsheet
+Constraint-Based Spreadsheet
+============================
+
+[![Live demo](https://img.shields.io/badge/Live%20demo-%E2%86%92-9D6EB3.svg?style=flat-square)](https://alexwarth.github.io/projects/constraint-based-spreadsheet)
 
 In a standard spreadsheet application, the relationships defined by formulas are strictly one-way: if the formula for `expenses` is `=rent+groceries`, then entering a new value for `rent` or `groceries` will cause the value of `expenses` to change, but entering a new value for `expenses` will simply replace its formula with the new value, leaving the other cells unchanged. There is no *direct* way for the user to set the value of a cell like `expenses` while still maintaining that cell's relationship to the other cells. Instead, the user must repeatedly enter different values for the other cells until the formula for `expenses` happens to yield the desired value. In our simple example, this kind of experimentation is not all that difficult or time-consuming (and it would be even easier to find an analytical solution) but in larger, more complex spreadsheets, it can be a significant burden to the user.
 
