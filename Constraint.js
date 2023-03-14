@@ -1,21 +1,21 @@
 App.Constraint = {
   grammar: ohm.namespace('rbs').getGrammar('Grammar'),
-  create: function() {
+  create() {
     // TODO: replace <input> element w/ CodeMirror to make syntax highlighting, etc. possible.
-    var $self = $('<aConstraint><input type="text"/><deleteButton/><error/></aConstraint>');
-    var $input = $self.children('input');
-    var $deleteButton = $self.children('deleteButton');
-    var $error = $self.children('error');
+    const $self = $('<aConstraint><input type="text"/><deleteButton/><error/></aConstraint>');
+    const $input = $self.children('input');
+    const $deleteButton = $self.children('deleteButton');
+    const $error = $self.children('error');
 
-    var expr = '';
+    let expr = '';
 
-    var self = $self[0];
-    self.errorFn = function() { return 0; };
+    const self = $self[0];
+    self.errorFn = () => 0;
     self.varNames = [];
 
-    var ENTER = 13;
-    var ESC = 27;
-    $input.keyup(function(e) {
+    const ENTER = 13;
+    const ESC = 27;
+    $input.keyup(e => {
       if (e.keyCode === ESC || e.keyCode === ENTER && !isDirty()) {
         $input.val(expr);
         parse($input.val());
@@ -26,12 +26,13 @@ App.Constraint = {
       updateView();
     });
 
-    $input.keypress(function(e) {
-      var pretty = toPrettyChar(e.charCode);
+    $input.keypress(e => {
+      const pretty = toPrettyChar(e.charCode);
       if (pretty !== undefined &&
-          typeof this.selectionStart === 'number' && typeof this.selectionEnd == 'number') {
-        var selectionStart = this.selectionStart;
-        var selectionEnd = this.selectionEnd;
+          typeof this.selectionStart === 'number' &&
+          typeof this.selectionEnd == 'number') {
+        const selectionStart = this.selectionStart;
+        const selectionEnd = this.selectionEnd;
         this.value = this.value.slice(0, selectionStart) + pretty + this.value.slice(selectionEnd);
         this.setSelectionRange(selectionStart + 1, selectionStart + 1);
         return false;
@@ -40,27 +41,24 @@ App.Constraint = {
 
     $input.change(exprChanged);
 
-    $deleteButton.click(function() {
+    $deleteButton.click(() => {
       $self.trigger('delete');
     });
 
-    self.focus = function() {
-      $input.focus();
-    };
+    self.focus = () => $input.focus();
 
     function exprChanged() {
-      var newExpr = $input.val();
+      const newExpr = $input.val();
       if (newExpr === expr) {
         return;
       }
 
-      var node = parse(newExpr);
+      const node = parse(newExpr);
       if (!node) {
         updateView();
         return;
       }
 
-      var oldExpr = expr;
       expr = newExpr;
       refreshVarNames(node);
       self.errorFn = toErrorFn(node);
@@ -94,29 +92,31 @@ App.Constraint = {
       return $input.val() !== expr;
     }
 
-    self.inlineVar = function(name, value) {
+    self.inlineVar = (name, value) => {
       if (expr.length === 0) {
         return;
       }
 
-      var node = App.Constraint.grammar.matchContents(withoutPrettyChars(expr), 'Constraint');
-      var intervals = [];
-      var collectIntervals = App.Constraint.grammar.semanticAction({
-        ident:     function(_, _) {
-                     if (this.interval.contents === name) {
-                       intervals.push(this.interval);
-                     }
-                   },
-        _terminal: function() {},
-        _default:  function() { this.children.forEach(function(child) { collectIntervals(child); }); }
+      const node = App.Constraint.grammar.matchContents(withoutPrettyChars(expr), 'Constraint');
+      const intervals = [];
+      const collectIntervals = App.Constraint.grammar.semanticAction({
+        ident(_1, _2) {
+          if (this.interval.contents === name) {
+            intervals.push(this.interval);
+          }
+        },
+        _terminal() {},
+        _default() {
+          this.children.forEach(child => collectIntervals(child));
+        }
       });
       collectIntervals(node);
       if (intervals.length === 0) {
         return;
       }
-      var newExpr = expr;
+      let newExpr = expr;
       while (intervals.length > 0) {
-        var interval = intervals.pop();
+        const interval = intervals.pop();
         newExpr = newExpr.substr(0, interval.startIdx) + value + newExpr.substr(interval.endIdx);
       }
       $input.val(newExpr);
@@ -124,15 +124,14 @@ App.Constraint = {
     };
 
     function refreshVarNames(node) {
-      var varName = {};
-      var recordVarNames = App.Constraint.grammar.semanticAction({
+      const varName = {};
+      const recordVarNames = App.Constraint.grammar.semanticAction({
         ident(_1, _2) {
           varName[this.interval.contents] = true;
         },
-        _terminal() {
-        },
+        _terminal() {},
         _default() {
-          this.children.forEach(function(child) { recordVarNames(child); });
+          this.children.forEach(child => recordVarNames(child));
         }
       });
       recordVarNames(node);
@@ -143,7 +142,7 @@ App.Constraint = {
       return new Function('varDict', 'return ' + toErrorExpr(node) + ';');
     }
 
-    var toErrorExpr = App.Constraint.grammar.synthesizedAttribute({
+    const toErrorExpr = App.Constraint.grammar.synthesizedAttribute({
       Constraint(expr) {
         return toErrorExpr(expr);
       },
@@ -216,12 +215,14 @@ App.Constraint = {
       } catch (e) {
         $('<label>Expected: </label>').appendTo($error);
         $input[0].setSelectionRange(e.getPos(), e.getPos());
-        e.getExpected().forEach(function(text, idx, expected) {
+        e.getExpected().forEach((text, idx, expected) => {
           if (idx > 0) {
             $('<light/>').text( idx === expected.length - 1 ? ', or ' : ', ').appendTo($error);
           }
-          if (text.charAt(0) === '"' && text.charAt(text.length - 1) === '"' ||
-              text.charAt(0) === "'" && text.charAt(text.length - 1) === "'") {
+          if (
+            text.charAt(0) === '"' && text.charAt(text.length - 1) === '"' ||
+            text.charAt(0) === "'" && text.charAt(text.length - 1) === "'")
+          {
             text = text.substr(1, text.length - 2);
             $('<literal><light>"</light><code>' + text + '</code><light>"</light></literal>').appendTo($error);
           } else {

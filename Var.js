@@ -1,24 +1,24 @@
 App.Var = {
-  create: function(name, value) {
-    var $self = $('<aVar><lockButton/><barsButton/><name>' + name + '</name><input type="text"/><deleteButton/></aVar>');
-    var $input = $self.children('input');
-    var $lockButton = $self.children('lockButton');
-    var $barsButton = $self.children('barsButton');
-    var $deleteButton = $self.children('deleteButton');
-    var $name = $self.children('name');
+  create(name, value) {
+    const $self = $('<aVar><lockButton/><barsButton/><name>' + name + '</name><input type="text"/><deleteButton/></aVar>');
+    const $input = $self.children('input');
+    const $lockButton = $self.children('lockButton');
+    const $barsButton = $self.children('barsButton');
+    const $deleteButton = $self.children('deleteButton');
+    const $name = $self.children('name');
 
-    var numDecimalPlaces = 2;
-    var locked = false;
-    var hasBar = false;
+    let numDecimalPlaces = 2;
+    let locked = false;
+    let hasBar = false;
 
-    var self = $self[0];
+    const self = $self[0];
 
     Object.defineProperties(self, {
       value: {
-        get: function() {
+        get() {
           return value;
         },
-        set: function(newValue) {
+        set(newValue) {
           value = newValue;
           $input.val(newValue.toFixed(numDecimalPlaces));
           $name.attr('title', value);
@@ -26,19 +26,19 @@ App.Var = {
         }
       },
       locked: {
-        get: function() {
+        get() {
           return locked;
         },
-        set: function(newLocked) {
+        set(newLocked) {
           locked = newLocked;
           $self.toggleClass('locked', locked);
         }
       },
       hasBar: {
-        get: function() {
+        get() {
           return hasBar;
         },
-        set: function(newHasBar) {
+        set(newHasBar) {
           hasBar = newHasBar;
           $self.toggleClass('hasBar', hasBar);
         }
@@ -48,10 +48,10 @@ App.Var = {
     self.value = value;
     self.name = name;
 
-    var ENTER = 13;
-    var ESC = 27;
-    $input.keyup(function(e) {
-      var dirty = parseFloat($input.val()) !== parseFloat(value.toFixed(numDecimalPlaces));
+    const ENTER = 13;
+    const ESC = 27;
+    $input.keyup(e => {
+      const dirty = parseFloat($input.val()) !== parseFloat(value.toFixed(numDecimalPlaces));
       if (e.keyCode === ENTER && !dirty || e.keyCode === ESC) {
         self.value = self.value;  // to reset the contents of the input element
         $input.blur();
@@ -60,7 +60,7 @@ App.Var = {
       }
     });
 
-    $input.change(function() {
+    $input.change(() => {
       if (isAllHashes($input.val())) {
         numDecimalPlaces = $input.val().length;
         self.value = self.value;  // to reset the contents of the input element
@@ -68,12 +68,12 @@ App.Var = {
         return;
       }
 
-      var newValue = parseFloat($input.val());
+      const newValue = parseFloat($input.val());
       if (Number.isNaN(newValue)) {
         return;
       }
 
-      var oldValue = self.value;
+      const oldValue = self.value;
       if (newValue !== oldValue) {
         self.value = newValue;
         $self.trigger('change');
@@ -84,22 +84,22 @@ App.Var = {
       $input.blur();
     });
 
-    $lockButton.click(function() {
+    $lockButton.click(() => {
       self.locked = !self.locked;
       $self.trigger('lockbuttonclick');
     });
 
-    $barsButton.click(function() {
+    $barsButton.click(() => {
       self.hasBar = !self.hasBar;
       $self.trigger('barsbuttonclick');
     });
 
-    $deleteButton.click(function() {
+    $deleteButton.click(() => {
       $self.trigger('delete');
     });
 
     function isAllHashes(str) {
-      for (var idx = 0; idx < str.length; idx++) {
+      for (let idx = 0; idx < str.length; idx++) {
         if (str[idx] !== '#') {
           return false;
         }
@@ -108,5 +108,5 @@ App.Var = {
     }
 
     return self;
-   }
+  }
 };
