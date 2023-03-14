@@ -10,7 +10,7 @@ class Relax {
   getError() {
     return this.errorFns
       .map(errorFn => Math.abs(errorFn(this.varDict)))
-      .reduce((e1, e2) => e1 + e2);
+      .reduce((e1, e2) => e1 + e2, 0);
   }
 
   // TODO: replace this w/ automatic differentiation

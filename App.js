@@ -83,7 +83,7 @@ const App = {
       });
   
       $(aVar).on('delete', () => {
-        $('aConstraint').each(() => {
+        $('aConstraint').each(function() {
           this.inlineVar(aVar.name, aVar.value);
           if (this.varNames.length === 0) {
             deleteConstraint(this);
