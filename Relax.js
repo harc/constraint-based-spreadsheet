@@ -59,14 +59,13 @@ Relax.prototype.getUnlockedVars = function() {
 };
 
 Relax.prototype.relax = function(optVars) {
-  var self = this;
   var vars = optVars || this.getUnlockedVars();
-  var deltas = vars.map(function(aVar) { return self.computeDelta(aVar); });
-  var numDeltas = deltas.filter(function(d) { return typeof d === 'number'; }).length;
+  var deltas = vars.map(aVar => this.computeDelta(aVar));
+  var numDeltas = deltas.filter(d => typeof d === 'number' /*&& d > this.epsilon*/).length;
   for (var idx = 0; idx < vars.length; idx++) {
     var aVar = vars[idx];
     var delta = deltas[idx];
-    if (typeof delta === 'number') {
+    if (typeof delta === 'number' /*&& delta > this.epsilon*/) {
       aVar.value += delta / numDeltas;
     }
   }
@@ -90,4 +89,3 @@ Relax.prototype.iterateForUpTo = function(tMillis) {
   }
   return error;
 };
-

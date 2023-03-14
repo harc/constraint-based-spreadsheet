@@ -10,9 +10,10 @@
 
 Grammar {
   Constraint
-    = Expr '<' Expr  -- lt
-    | Expr '=' Expr  -- eq
-    | Expr '>' Expr  -- gt
+    = Expr  '<'  Expr  -- lt
+    | Expr  '='  Expr  -- eq
+    | Expr  '>'  Expr  -- gt
+    | ident ':=' Expr  -- def
 
   Expr
     = AddExpr
@@ -54,6 +55,7 @@ Grammar {
     <script src="App.js"></script>
     <script src="Constraint.js"></script>
     <script src="Var.js"></script>
+    <canvas id="canvas"></canvas>
     <app>
       <left>
         <vars></vars>
@@ -76,6 +78,9 @@ Grammar {
               "<a href="http://thenounproject.com/term/plus/33942/">Plus</a>" and
               "<a href="http://thenounproject.com/term/cross/33853/">Cross</a>" icons
               by Berkay Sargin,
+
+              "<a href="http://thenounproject.com/term/bars/29229/">Equalizer</a>"
+              by Stephan Langenegger,
 
               "<a href="http://thenounproject.com/term/lock/1559/">Lock</a>" and
               "<a href="http://thenounproject.com/term/unlock/1560/">Unlock</a>" icons
@@ -107,4 +112,3 @@ App.init();
     </script>
   </body>
 </html>
-

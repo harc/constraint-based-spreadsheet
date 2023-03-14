@@ -1,13 +1,15 @@
 App.Var = {
   create: function(name, value) {
-    var $self = $('<aVar><lockButton/><name>' + name + '</name><input type="text"/><deleteButton/></aVar>');
+    var $self = $('<aVar><lockButton/><barsButton/><name>' + name + '</name><input type="text"/><deleteButton/></aVar>');
     var $input = $self.children('input');
     var $lockButton = $self.children('lockButton');
-    var $name = $self.children('name');
+    var $barsButton = $self.children('barsButton');
     var $deleteButton = $self.children('deleteButton');
+    var $name = $self.children('name');
 
     var numDecimalPlaces = 2;
     var locked = false;
+    var hasBar = false;
 
     var self = $self[0];
 
@@ -30,6 +32,15 @@ App.Var = {
         set: function(newLocked) {
           locked = newLocked;
           $self.toggleClass('locked', locked);
+        }
+      },
+      hasBar: {
+        get: function() {
+          return hasBar;
+        },
+        set: function(newHasBar) {
+          hasBar = newHasBar;
+          $self.toggleClass('hasBar', hasBar);
         }
       }
     });
@@ -78,6 +89,11 @@ App.Var = {
       $self.trigger('lockbuttonclick');
     });
 
+    $barsButton.click(function() {
+      self.hasBar = !self.hasBar;
+      $self.trigger('barsbuttonclick');
+    });
+
     $deleteButton.click(function() {
       $self.trigger('delete');
     });
@@ -94,4 +110,3 @@ App.Var = {
     return self;
    }
 };
-

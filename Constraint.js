@@ -126,9 +126,14 @@ App.Constraint = {
     function refreshVarNames(node) {
       var varName = {};
       var recordVarNames = App.Constraint.grammar.semanticAction({
-        ident:     function(_, _) { varName[this.interval.contents] = true; },
-        _terminal: function()     {},
-        _default:  function()     { this.children.forEach(function(child) { recordVarNames(child); }); }
+        ident(_1, _2) {
+          varName[this.interval.contents] = true;
+        },
+        _terminal() {
+        },
+        _default() {
+          this.children.forEach(function(child) { recordVarNames(child); });
+        }
       });
       recordVarNames(node);
       self.varNames = Object.keys(varName);
@@ -139,26 +144,69 @@ App.Constraint = {
     }
 
     var toErrorExpr = App.Constraint.grammar.synthesizedAttribute({
-      Constraint:     function(expr)    { return toErrorExpr(expr); },
-      Constraint_lt:  function(x, _, y) { return 'Math.max(0, ' + toErrorExpr(x) + ' - (' + toErrorExpr(y) + '))'; },
-      Constraint_eq:  function(x, _, y) { return toErrorExpr(x) + ' - (' + toErrorExpr(y) + ')'; },
-      Constraint_gt:  function(x, _, y) { return 'Math.max(0, ' + toErrorExpr(y) + ' - (' + toErrorExpr(x) + '))'; },
-      Expr:           function(expr)    { return toErrorExpr(expr); },
-      AddExpr_plus:   function(x, _, y) { return toErrorExpr(x) + ' + ' + toErrorExpr(y); },
-      AddExpr_minus:  function(x, _, y) { return toErrorExpr(x) + ' - ' + toErrorExpr(y); },
-      AddExpr:        function(expr)    { return toErrorExpr(expr); },
-      MulExpr_times1: function(x, y)    { return toErrorExpr(x) + ' * ' + toErrorExpr(y); },
-      MulExpr_times2: function(x, _, y) { return toErrorExpr(x) + ' * ' + toErrorExpr(y); },
-      MulExpr_divide: function(x, _, y) { return toErrorExpr(x) + ' / ' + toErrorExpr(y); },
-      MulExpr:        function(expr)    { return toErrorExpr(expr); },
-      ExpExpr_exp:    function(x, _, y) { return 'Math.pow('+ toErrorExpr(x) + ', ' + toErrorExpr(y) + ')'; },
-      ExpExpr:        function(expr)    { return toErrorExpr(expr); },
-      PriExpr_paren:  function(_, e, _) { return '(' + toErrorExpr(e) + ')'; },
-      PriExpr_pos:    function(_, e)    { return '(' + toErrorExpr(e) + ')'; },
-      PriExpr_neg:    function(_, e)    { return '-(' + toErrorExpr(e) + ')'; },
-      PriExpr:        function(expr)    { return toErrorExpr(expr); },
-      ident:          function(_, _)    { return 'varDict.' + this.interval.contents + '.value'; },
-      number:         function(_)       { return this.interval.contents; }
+      Constraint(expr) {
+        return toErrorExpr(expr);
+      },
+      Constraint_lt(x, _, y) {
+        return '1000000 * Math.max(0, ' + toErrorExpr(x) + ' - (' + toErrorExpr(y) + '))';
+      },
+      Constraint_eq(x, _, y) {
+        return toErrorExpr(x) + ' - (' + toErrorExpr(y) + ')';
+      },
+      Constraint_gt(x, _, y) {
+        return '1000000 * Math.max(0, ' + toErrorExpr(y) + ' - (' + toErrorExpr(x) + '))';
+      },
+      Constraint_def(x, _, e) {
+        throw new Error('TODO');
+      },
+      Expr(expr) {
+        return toErrorExpr(expr);
+      },
+      AddExpr_plus(x, _, y) {
+        return toErrorExpr(x) + ' + ' + toErrorExpr(y);
+      },
+      AddExpr_minus(x, _, y) {
+        return toErrorExpr(x) + ' - ' + toErrorExpr(y);
+      },
+      AddExpr(expr) {
+        return toErrorExpr(expr);
+      },
+      MulExpr_times1(x, y) {
+        return toErrorExpr(x) + ' * ' + toErrorExpr(y);
+      },
+      MulExpr_times2(x, _, y) {
+        return toErrorExpr(x) + ' * ' + toErrorExpr(y);
+      },
+      MulExpr_divide(x, _, y) {
+        return toErrorExpr(x) + ' / ' + toErrorExpr(y);
+      },
+      MulExpr(expr) {
+        return toErrorExpr(expr);
+      },
+      ExpExpr_exp(x, _, y) {
+        return 'Math.pow('+ toErrorExpr(x) + ', ' + toErrorExpr(y) + ')';
+      },
+      ExpExpr(expr) {
+        return toErrorExpr(expr);
+      },
+      PriExpr_paren(_1, e, _2) {
+        return '(' + toErrorExpr(e) + ')';
+      },
+      PriExpr_pos(_, e) {
+        return '(' + toErrorExpr(e) + ')';
+      },
+      PriExpr_neg(_, e) {
+        return '-(' + toErrorExpr(e) + ')';
+      },
+      PriExpr(expr) {
+        return toErrorExpr(expr);
+      },
+      ident(_1, _2) {
+        return 'varDict.' + this.interval.contents + '.value';
+      },
+      number(_) {
+        return this.interval.contents;
+      }
     });
 
     function parse(newExpr) {
@@ -187,4 +235,3 @@ App.Constraint = {
     return self;
   }
 };
-
