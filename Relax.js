@@ -59,6 +59,9 @@ class Relax {
     const vars = optVars || this.getUnlockedVars();
     const deltas = vars.map(aVar => this.computeDelta(aVar));
     const numDeltas = deltas.filter(d => typeof d === 'number' /*&& d > this.epsilon*/).length;
+    if (numDeltas === 0) {
+      return;
+    }
     for (let idx = 0; idx < vars.length; idx++) {
       const aVar = vars[idx];
       const delta = deltas[idx];
