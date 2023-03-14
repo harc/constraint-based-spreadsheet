@@ -39,12 +39,12 @@ class Relax {
   computeDelta(aVar) {
     let mbs = 0;
     let mms = 0;
-    this.errorFns.forEach(errorFn => {
+    for (const errorFn of this.errorFns) {
       const m = this.derivative(errorFn, aVar);
       const b = errorFn(this.varDict) - m * aVar.value;
       mbs += m * b;
       mms += m * m;
-    });
+    }
     const newValue = -mbs / mms;
     return isFinite(newValue) ? newValue - aVar.value : undefined;
   }
@@ -71,17 +71,15 @@ class Relax {
   iterateForUpTo(tMillis) {
     const vars = this.getUnlockedVars();
     const t0 = Date.now();
-    let count = 0;
     while (this.getError() > this.epsilon && (Date.now() - t0) < tMillis) {
       this.relax(vars);
-      count++;
     }
     const error = this.getError();
     if (error > this.epsilon) {
-      vars.forEach(aVar => {
+      for (const aVar of vars) {
         const sign = Math.random() < 0.5 ? -1 : 1;
         aVar.value += sign * self.tinyDelta;
-      });
+      }
     }
     return error;
   }
